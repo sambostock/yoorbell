@@ -13,3 +13,8 @@ Thumbs.db
 # Ignore config directory #
 ###########################
 config/
+
+
+# Ignore log directory #
+########################
+log/
