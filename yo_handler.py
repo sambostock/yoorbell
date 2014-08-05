@@ -3,10 +3,11 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import RPi.GPIO as GPIO
 import time
 import urlparse
+import yaml
 
 # Load config file
 config = None
-with open("config/config.yaml") as config_file:
+with open("config.yaml") as config_file:
     config = yaml.load(config_file)
 
 # Get constants from config

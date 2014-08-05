@@ -7,7 +7,7 @@ import yaml
 
 # Load config file
 config = None
-with open("config/config.yaml") as config_file:
+with open("config.yaml") as config_file:
     config = yaml.load(config_file)
 
 # Get constants from config
