@@ -10,12 +10,12 @@ Thumbs.db
 .AppleDouble
 
 
-# Ignore config directory #
-###########################
+# Ignore config #
+#################
 config/
 config.yaml
 
 
-# Ignore log directory #
-########################
+# Ignore logs #
+###############
 log/
