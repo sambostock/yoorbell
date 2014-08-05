@@ -1,0 +1,30 @@
+# YO API token, for authenticating API account
+api-token:  abcdefgh-ijkl-mnop-qrst-uvwxyz012345
+# Port for incoming YO server to listen on
+port: 8979
+# GPIO pins to use
+pins:
+  # Pin to read buzzer signal from
+  buzz: 24
+  # Pin to signal door unlock from
+  door: 23
+# Calibration settings for buzz detection
+calibration:
+  # Switch debounce time, in ms
+  bouncetime: 200
+  # Number of samples to use to verify a buzz really occured
+  samples:  20
+  # The delay between samples, in ms
+  delay:  5
+# YO user lists (usernames must be in ALL CAPS)
+users:
+  # Users authorized to unlock the door
+  authorized:
+    - USER001
+    - USER002
+    - USER004
+  # Users to be notified of a buzz
+  notify:
+    - USER001
+    - USER003
+    - USER004

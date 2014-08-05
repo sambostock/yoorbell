@@ -3,28 +3,28 @@ import RPi.GPIO as GPIO
 import datetime
 import time
 from yoapi import yo
+import yaml
 
-# Load API Token from file
-API_TOKEN = None
-with open("config/api_token.txt") as api_token:
-    API_TOKEN = api_token.read().rstrip()
+# Load config file
+config = None
+with open("config/config.yaml") as config_file:
+    config = yaml.load(config_file)
 
-# Function to read in users to YO
-def get_users_to_notify():
-    with open("config/notify_users.txt") as users:
-        return [line.rstrip() for line in users]
+# Get constants from config
+API_TOKEN = config["api-token"]
+USERS_TO_NOTIFY = config["users"]["notify"]
+BUZZ_INPUT_PIN = config["pins"]["buzz"]
+BOUNCETIME = config["calibration"]["bouncetime"]
+SAMPLES = config["calibration"]["samples"]
+DELAY = config["calibration"]["delay"] / 1000.0 # ms -> sec
 
 # Initalize Yo client
 yo_client = yo.api(API_TOKEN)
 
-# Function to Yo all users found in the notify file
+# Function to Yo all users found in the config file
 def yo():
-    # Since buzzes are not a super regular occurence, the overhead from reloading the list of users is negligable.
-    for user in get_users_to_notify():
+    for user in USERS_TO_NOTIFY:
         yo_client.yo(user)
-
-# Pin to listen for buzz on
-BUZZ_INPUT_PIN = 24
 
 # Config GPIO
 GPIO.setmode(GPIO.BCM)
@@ -37,8 +37,8 @@ def timestamp():
 # Function to confirm edge is valid, and not from a bounce or floating signal
 def confirm_buzz(pin):
     count = 0
-    for i in range(20):
-        time.sleep(0.005)  # sleep 5ms between samples
+    for i in range(SAMPLES):
+        time.sleep(DELAY)  # sleep 5ms between samples
         count += 1 if GPIO.input(pin) else -1
     if count > 0:
         handle_buzz()

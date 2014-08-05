@@ -4,14 +4,19 @@ import RPi.GPIO as GPIO
 import time
 import urlparse
 
-DOOR_UNLOCK_PIN = 23
+# Load config file
+config = None
+with open("config/config.yaml") as config_file:
+    config = yaml.load(config_file)
+
+# Get constants from config
+API_TOKEN = config["api-token"]
+AUTHORIZED_USERS = config["users"]["authorized"]
+DOOR_UNLOCK_PIN = config["pins"]["door"]
+PORT_NUMBER = config["port"]
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(DOOR_UNLOCK_PIN, GPIO.OUT)
-
-
-PORT_NUMBER = 8979
-
 
 class myHandler(BaseHTTPRequestHandler):
 
@@ -21,7 +26,7 @@ class myHandler(BaseHTTPRequestHandler):
 
         # Figure out if the user is authorized
         user = self.get_user()
-        if user in self.authorized_users():
+        if user in AUTHORIZED_USERS:
             self.status = 200  # OK, unlocking
         elif user is None:
             self.status = 400  # bad request, no user provided
@@ -54,13 +59,6 @@ class myHandler(BaseHTTPRequestHandler):
         GPIO.output(DOOR_UNLOCK_PIN, 1)
         time.sleep(seconds)
         GPIO.output(DOOR_UNLOCK_PIN, 0)
-
-    def authorized_users(self):
-        # Load list of users authorized to unlock via Yo.
-        authorized_users = []
-        with open("config/authorized_users.txt") as users:
-            authorized_users = [line.rstrip() for line in users]
-        return authorized_users
 
     def get_user(self):
         user = None
