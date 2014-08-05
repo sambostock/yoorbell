@@ -10,8 +10,8 @@ Thumbs.db
 .AppleDouble
 
 
-# Ignore config #
-#################
+# Ignore config directory #
+###########################
 config/
 config.yaml
 
