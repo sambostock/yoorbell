@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+'''Server and Handler classes for a Yothenticator server, an HTTP server
+accepting GET requests with a username parameter to authenticate against the
+servers authorized users.
+:Author: Samuel Bostock
+'''
 import urlparse
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
@@ -10,9 +15,11 @@ def try_to_call(obj):
 
 
 class YothenticatorServer(HTTPServer):
+
     '''HTTPServer using YOs from authorized users as a means of triggering some
     action.
     '''
+
     def __init__(self, server_address, RequestHandlerClass, user_list,
                  **kwargs):
         '''Accept the list of authorized users, and action functions, then
@@ -45,7 +52,10 @@ class YothenticatorServer(HTTPServer):
 
 class YothenticatorRequestHandler (BaseHTTPRequestHandler):
 
-    # Authenticate the user using the server's user list
+    '''GET Request Handler for YothenticatorServer, which verifies username
+    query parameter against server's user list.
+    '''
+
     def authenticate(self, user):
         '''Verify the user against the server's user list, and set the status
         code appropriately.
